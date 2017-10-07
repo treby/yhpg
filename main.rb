@@ -18,13 +18,28 @@ def parse_input(txt)
 end
 
 # make
-def make_triangle(height, direction = 'R')
-  (0...height).map do |pos|
-    range = ((-1 * pos)..pos)
-    range.map { |a| [pos, a] }
+def cover_areas(triangle)
+  (0...triangle.height).map do |w_or_h|
+    range = ((-1 * w_or_h)..w_or_h)
+    range.map do |x_or_y|
+      case triangle.direction
+      when 'R'
+        # 右が直角(左に伸ばす)
+        [-1 * w_or_h, x_or_y]
+      when 'L'
+        # 左が直角(右に伸ばす)
+        [w_or_h, x_or_y]
+      when 'T'
+        # 上が直角(下に伸ばす)
+        [x_or_y, w_or_h]
+      when 'B'
+        # 下が直角(上に伸ばす)
+        [x_or_y, -1 * w_or_h]
+      end
+    end
   end
 end
 
-#inputs = parse_input(input)
-pp make_triangle(5)
+inputs = parse_input(input)
+pp cover_areas(Triangle.new(4, 6, 'R', 2))
 
