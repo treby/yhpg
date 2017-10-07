@@ -52,9 +52,7 @@ def cover_areas(triangle)
 end
 
 def count_same(a, b)
-  a.select do |point|
-    b.include?(point)
-  end.count
+  (a & b).count
 end
 
 a, b = parse_input(input).map do |triangle|
