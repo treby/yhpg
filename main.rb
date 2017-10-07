@@ -30,7 +30,7 @@ def cover_areas(triangle)
                     triangle.y
                   end
 
-  (0...triangle.height).map do |x_or_y|
+  (0...triangle.height).flat_map do |x_or_y|
     range = ((-1 * x_or_y)..x_or_y)
     range.map do |offset|
       case triangle.direction
@@ -55,4 +55,3 @@ inputs = parse_input(input)
 inputs.each do |triangle|
   pp cover_areas(triangle)
 end
-
