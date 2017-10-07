@@ -23,11 +23,11 @@ def cover_areas(triangle)
                            when 'R', 'L'
                              # 右が直角(左に伸ばす)
                              # 左が直角(右に伸ばす)
-                             [triangle.x, triangle.x + (triangle.height - 1)] # 左
+                             [triangle.x, triangle.x + (triangle.height - 1)] # 'L'
                            when 'T', 'B'
                              # 上が直角(下に伸ばす)
                              # 下が直角(上に伸ばす)
-                             [triangle.y, triangle.y + (triangle.height - 1)] # 上
+                             [triangle.y, triangle.y + (triangle.height - 1)] # 'T'
                            end
   (from_x_or_y...to_x_or_y).map do |w_or_h|
     range = ((-1 * w_or_h)..w_or_h)
@@ -35,16 +35,16 @@ def cover_areas(triangle)
       case triangle.direction
       when 'R'
         # 右が直角(左に伸ばす)
-        [-1 * w_or_h, x_or_y]
+        [w_or_h, x_or_y]
       when 'L'
         # 左が直角(右に伸ばす)
-        [w_or_h, x_or_y]
+        [-1 * w_or_h, x_or_y]
       when 'T'
         # 上が直角(下に伸ばす)
-        [x_or_y, w_or_h]
+        [x_or_y, -1 * w_or_h]
       when 'B'
         # 下が直角(上に伸ばす)
-        [x_or_y, -1 * w_or_h]
+        [x_or_y, w_or_h]
       end
     end
   end
