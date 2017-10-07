@@ -1,7 +1,7 @@
 require 'pp'
 Triangle = Struct.new(:x, :y, :direction, :height)
 
-input = '7,0R6/3,1B5'
+input = nil#'7,0R6/3,1B5'
 if input.nil?
   print 'input> '
   input = STDIN.gets.chomp
@@ -51,7 +51,13 @@ def cover_areas(triangle)
   end
 end
 
-inputs = parse_input(input)
-inputs.each do |triangle|
-  pp cover_areas(triangle)
+def count_same(a, b)
+  a.select do |point|
+    b.include?(point)
+  end.count
 end
+
+a, b = parse_input(input).map do |triangle|
+  cover_areas(triangle)
+end
+puts count_same(a, b)
