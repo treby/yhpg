@@ -36,16 +36,16 @@ def cover_areas(triangle)
       case triangle.direction
       when 'R'
         # 右が直角(左に伸ばす)
-        [- 1 * x_or_y + x_or_y_offset, triangle.y + offset]
+        [- 1 * x_or_y + x_or_y_offset, triangle.y + offset].to_s.to_sym
       when 'L'
         # 左が直角(右に伸ばす)
-        [x_or_y + x_or_y_offset, triangle.y + offset]
+        [x_or_y + x_or_y_offset, triangle.y + offset].to_s.to_sym
       when 'T'
         # 上が直角(下に伸ばす)
-        [triangle.x + offset, x_or_y + x_or_y_offset]
+        [triangle.x + offset, x_or_y + x_or_y_offset].to_s.to_sym
       when 'B'
         # 下が直角(上に伸ばす)
-        [triangle.x + offset, -1 * x_or_y + x_or_y_offset]
+        [triangle.x + offset, -1 * x_or_y + x_or_y_offset].to_s.to_sym
       end
     end
   end
