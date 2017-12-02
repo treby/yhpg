@@ -9,33 +9,42 @@ class MazeSolver {
     let curr = start;
     let step = 0;
 
+    let answers = [];
+    this.step(start, goal, answers, 1);
+
+    console.log(JSON.stringify(step));
+    return `${step}`;
+  }
+
+  step(curr, goal, answers, step) {
     const [goalCol, goalRow] = [goal[0], goal[1]];
+    const currCol = curr[0];
+    const currRow = curr[1];
 
-    while(!(start[0] === goalCol && start[1] === goalRow)) {
-      const currCol = curr[0];
-      const currRow = curr[1];
-
-      if (currCol > goalCol && !this.isBlocked(curr, [currCol - 1, currRow])) {
-        // Go Top
-        curr[0]--;
-      } else if (currCol < goalCol && !this.isBlocked(curr, [currCol + 1, currRow])) {
-        // Go Bottom
-        curr[0]++;
-      } else if (currRow > goalRow && !this.isBlocked([currCol, currRow - 1], curr)) {
-        // Go Left
-        curr[1]--;
-      } else if (currRow < goalRow && !this.isBlocked([currCol, currRow + 1], curr)) {
-        // Go Right
-        curr[1]++;
-      } else {
-        break;
-      }
-
-      step++;
-      if (step > 50) break;
+    if (currRow === goalRow && currCol === goalCol) {
+      answer.push(step);
+      return;
     }
 
-    return `${step}`;
+    if (currCol > 0 && !this.isBlocked(curr, [currCol - 1, currRow])) {
+      // Go Top
+      if (step < 50) this.step([currCol - 1, currRow], goal, answers, step + 1);
+    }
+
+    if (currCol < 5 && !this.isBlocked(curr, [currCol + 1, currRow])) {
+      // Go Bottom
+      if (step < 50) this.step([currCol + 1, currRow], goal, answers, step + 1);
+    }
+
+    if (currRow > 0 && !this.isBlocked([currCol, currRow - 1], curr)) {
+      // Go Left
+      if (step < 50) this.step([currRow - 1, currRow], goal, answers, step + 1);
+    }
+
+    if (currRow < 5 && !this.isBlocked([currCol, currRow + 1], curr)) {
+      // Go Right
+      if (step < 50) this.step([currRow + 1, currRow], goal, answers, step + 1);
+    }
   }
 
   normalizePositionFromChar(chr) {
@@ -85,7 +94,7 @@ class MazeSolver {
       [[4, 5], [5, 5]],
     ];
 
-    blocks.some((block) => {
+    return blocks.some((block) => {
       return `${from[0]}${from[1]}${to[0]}${to[1]}` === `${block[0][0]}${block[0][1]}${block[1][0]}${block[1][1]}` ||
         `${from[0]}${from[1]}${to[0]}${to[1]}` === `${block[1][0]}${block[1][1]}${block[0][0]}${block[0][1]}`;
     });
