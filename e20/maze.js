@@ -4,46 +4,40 @@ class MazeSolver {
       this.normalizePositionFromChar(input.charAt(0)),
       this.normalizePositionFromChar(input.charAt(1))
     ];
-    console.log(`${JSON.stringify(start)}->${JSON.stringify(goal)}`);
-
-    let curr = start;
-    let step = 0;
-
     let answers = [];
-    this.step(start, goal, answers, 1);
+    this.step(start, goal, start, answers, 0);
 
-    console.log(JSON.stringify(step));
-    return `${step}`;
+    return `${Math.min(...answers)}`;
   }
 
-  step(curr, goal, answers, step) {
+  step(curr, goal, forbid, answers, step) {
     const [goalCol, goalRow] = [goal[0], goal[1]];
-    const currCol = curr[0];
-    const currRow = curr[1];
+    const [currCol, currRow] = [curr[0], curr[1]];
 
     if (currRow === goalRow && currCol === goalCol) {
-      answer.push(step);
+      answers.push(step);
       return;
     }
+    if (step > 20) return;
 
-    if (currCol > 0 && !this.isBlocked(curr, [currCol - 1, currRow])) {
-      // Go Top
-      if (step < 50) this.step([currCol - 1, currRow], goal, answers, step + 1);
+    // Go Top
+    if (!(currCol - 1 === forbid[0] && currRow === forbid[1]) && !this.isBlocked(curr, [currCol - 1, currRow])) {
+      this.step([currCol - 1, currRow], goal, curr, answers, step + 1);
     }
 
-    if (currCol < 5 && !this.isBlocked(curr, [currCol + 1, currRow])) {
-      // Go Bottom
-      if (step < 50) this.step([currCol + 1, currRow], goal, answers, step + 1);
+    // Go Bottom
+    if (!(currCol + 1 === forbid[0] && currRow === forbid[1]) && !this.isBlocked(curr, [currCol + 1, currRow])) {
+      this.step([currCol + 1, currRow], goal, curr, answers, step + 1);
     }
 
-    if (currRow > 0 && !this.isBlocked([currCol, currRow - 1], curr)) {
-      // Go Left
-      if (step < 50) this.step([currRow - 1, currRow], goal, answers, step + 1);
+    // Go Left
+    if (!(currCol === forbid[0] && currRow - 1 === forbid[1]) && !this.isBlocked([currCol, currRow - 1], curr)) {
+      this.step([currCol, currRow - 1], goal, curr, answers, step + 1);
     }
 
-    if (currRow < 5 && !this.isBlocked([currCol, currRow + 1], curr)) {
-      // Go Right
-      if (step < 50) this.step([currRow + 1, currRow], goal, answers, step + 1);
+    // Go Right
+    if (!(currCol === forbid[0] && currRow + 1 === forbid[1]) && !this.isBlocked([currCol, currRow + 1], curr)) {
+      this.step([currCol, currRow + 1], goal, curr, answers, step + 1);
     }
   }
 
@@ -65,9 +59,10 @@ class MazeSolver {
   }
 
   isBlocked(from, to) {
+    if (to[0] < 0 || to[0] > 5 || to[1] < 0 || to[1] > 5) return true;
     const blocks = [
       [[0, 1], [0, 2]],
-      [[1, 0], [1, 2]],
+      [[1, 0], [1, 1]],
       [[1, 4], [1, 5]],
       [[2, 1], [2, 2]],
       [[2, 2], [2, 3]],
