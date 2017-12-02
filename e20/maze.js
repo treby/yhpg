@@ -6,7 +6,36 @@ class MazeSolver {
     ];
     console.log(`${JSON.stringify(start)}->${JSON.stringify(goal)}`);
 
-    return '13';
+    let curr = start;
+    let step = 0;
+
+    const [goalCol, goalRow] = [goal[0], goal[1]];
+
+    while(!(start[0] === goalCol && start[1] === goalRow)) {
+      const currCol = curr[0];
+      const currRow = curr[1];
+
+      if (currCol > goalCol && !this.isBlocked(curr, [currCol - 1, currRow])) {
+        // Go Top
+        curr[0]--;
+      } else if (currCol < goalCol && !this.isBlocked(curr, [currCol + 1, currRow])) {
+        // Go Bottom
+        curr[0]++;
+      } else if (currRow > goalRow && !this.isBlocked([currCol, currRow - 1], curr)) {
+        // Go Left
+        curr[1]--;
+      } else if (currRow < goalRow && !this.isBlocked([currCol, currRow + 1], curr)) {
+        // Go Right
+        curr[1]++;
+      } else {
+        break;
+      }
+
+      step++;
+      if (step > 50) break;
+    }
+
+    return `${step}`;
   }
 
   normalizePositionFromChar(chr) {
@@ -24,6 +53,42 @@ class MazeSolver {
     const col = (index - row) / 6;
 
     return [col, row];
+  }
+
+  isBlocked(from, to) {
+    const blocks = [
+      [[0, 1], [0, 2]],
+      [[1, 0], [1, 2]],
+      [[1, 4], [1, 5]],
+      [[2, 1], [2, 2]],
+      [[2, 2], [2, 3]],
+      [[2, 4], [2, 5]],
+      [[3, 0], [3, 1]],
+      [[3, 4], [3, 5]],
+      [[4, 0], [4, 1]],
+      [[4, 3], [4, 4]],
+      [[5, 2], [5, 3]],
+      [[5, 3], [5, 4]],
+
+      [[0, 2], [1, 2]],
+      [[0, 4], [1, 4]],
+      [[1, 1], [2, 1]],
+      [[1, 2], [2, 2]],
+      [[1, 4], [2, 4]],
+      [[1, 5], [2, 5]],
+      [[2, 1], [3, 1]],
+      [[2, 3], [3, 3]],
+      [[3, 2], [4, 2]],
+      [[3, 3], [4, 3]],
+      [[4, 0], [5, 0]],
+      [[4, 2], [5, 2]],
+      [[4, 5], [5, 5]],
+    ];
+
+    blocks.some((block) => {
+      return `${from[0]}${from[1]}${to[0]}${to[1]}` === `${block[0][0]}${block[0][1]}${block[1][0]}${block[1][1]}` ||
+        `${from[0]}${from[1]}${to[0]}${to[1]}` === `${block[1][0]}${block[1][1]}${block[0][0]}${block[0][1]}`;
+    });
   }
 
   test(input, expected) {
